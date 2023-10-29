@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
-import pandas as pd
+import math
 
 def fare_price(distance, different_regions, hubs_in_dest_region):
-    raise NotImplementedError
+    #raise NotImplementedError
+    return 1 + distance * math.exp(1) ** (- distance / 100) * (1 + different_regions * hubs_in_dest_region / 10)
+
 
 
 class Station:
