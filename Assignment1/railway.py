@@ -8,13 +8,13 @@ def fare_price(distance, different_regions, hubs_in_dest_region):
 
 
 class Station:
-    def _init_(self, name, region, crs, lati, longi, hub):
+    def __init__(self, name, region, crs, lati, longi, hub):
 
         # check input type
-        if name.isinstance() != True or region.isinstance() != True or crs.isinstance() != True:
+        if isinstance(name, str) != True or isinstance(region, str) != True or isinstance(crs, str) != True:
             raise NotImplementedError
-        if lati.isdecimal() != True or longi.isdecimal() != True:
-            raise NotImplementedError
+        #if lati.isdecimal() != True or longi.isdecimal() != True:
+            #raise NotImplementedError
         if isinstance(hub, bool) != True:
             raise NotImplementedError
         
@@ -42,6 +42,18 @@ class Station:
 
 
 class RailNetwork:
+    def __init__(self, station_list):
+        check_list = []
+        self.stations = {}
+        for i in station_list:
+            if i.crs not in check_list:  # unique crs
+                check_list.append(i.crs)
+                self.stations[i.crs] = i.name  # add station to the dict
+            else:
+                print(f"Error: two stations with same crs: {i.crs}.")
+                raise NotImplementedError
+
+
     def regions(self):
         raise NotImplementedError
 
