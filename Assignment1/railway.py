@@ -12,20 +12,25 @@ class Station:
 
         # check input type
         if isinstance(name, str) != True or isinstance(region, str) != True or isinstance(crs, str) != True:
+            print("Type error for name or region or crs")
             raise NotImplementedError
         #if lati.isdecimal() != True or longi.isdecimal() != True:
             #raise NotImplementedError
         if isinstance(hub, bool) != True:
+            print("Type error for hub")
             raise NotImplementedError
         
         # check number of latitue and longitude
         if lati > 90 or lati < -90:
+            print("Length error for latitude")
             raise NotImplementedError
         if longi > 180 or longi < -180:
+            print("Length error for longitude")
             raise NotImplementedError
         
         # check crs
         if crs.isupper() != True or len(crs) != 3 or crs.isalpha() != True:
+            print("Input error for crs")
             raise NotImplementedError
 
         self.name = name
