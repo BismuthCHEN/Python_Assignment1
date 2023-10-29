@@ -8,7 +8,36 @@ def fare_price(distance, different_regions, hubs_in_dest_region):
 
 
 class Station:
+    def _init_(self, name, region, crs, lati, longi, hub):
+
+        # check input type
+        if name.isinstance() != True or region.isinstance() != True or crs.isinstance() != True:
+            raise NotImplementedError
+        if lati.isdecimal() != True or longi.isdecimal() != True:
+            raise NotImplementedError
+        if isinstance(hub, bool) != True:
+            raise NotImplementedError
+        
+        # check number of latitue and longitude
+        if lati > 90 or lati < -90:
+            raise NotImplementedError
+        if longi > 180 or longi < -180:
+            raise NotImplementedError
+        
+        # check crs
+        if crs.isupper() != True or len(crs) != 3 or crs.isalpha() != True:
+            raise NotImplementedError
+
+        self.name = name
+        self.region = region
+        self.crs = crs
+        self.lat = lati
+        self.lon = longi
+        self.hub = hub
+
     def distance_to(self):
+        
+
         raise NotImplementedError
 
 
