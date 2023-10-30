@@ -97,10 +97,30 @@ class RailNetwork:
         raise NotImplementedError
 
     def n_stations(self):
+        return len(self.stations)
         raise NotImplementedError
 
-    def hub_stations(self, region):
-        raise NotImplementedError
+    def hub_stations(self, region = None):
+        station_list = []
+        region_list = []
+        if region == None:
+            for i in self.stations.values():
+                if i.hub == True:
+                    station_list.append(i.__str__())
+                    region_list.append(i.region)
+        else:
+            for i in self.stations.values():
+                if i.hub == True and i.region == region:
+                    station_list.append(i.__str__())
+                    region_list.append(i.region)
+        
+        if len(region_list) == 0:
+            print("Error: region does not exist")
+            raise NotImplementedError
+        else:
+            return(station_list)
+
+        #raise NotImplementedError
 
     def closest_hub(self, s):
         raise NotImplementedError
