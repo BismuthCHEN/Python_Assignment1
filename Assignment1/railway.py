@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import math
+import numpy as np
 
 def fare_price(distance, different_regions, hubs_in_dest_region):
     #raise NotImplementedError
@@ -16,9 +17,15 @@ class Station:
             raise NotImplementedError
         #if lati.isdecimal() != True or longi.isdecimal() != True:
             #raise NotImplementedError
-        if isinstance(hub, bool) != True:
+        if hub == 1:
+            self.hub = True
+        elif hub == 0:
+            self.hub = False
+        elif isinstance(hub, bool) != True:
             print("Type error for hub")
             raise NotImplementedError
+        else:
+            self.hub = hub
         
         # check number of latitue and longitude
         if lati > 90 or lati < -90:
@@ -38,12 +45,33 @@ class Station:
         self.crs = crs
         self.lat = lati
         self.lon = longi
-        self.hub = hub
+        #self.hub = hub
 
-    def distance_to(self):
+    def distance_to(self, target_station):
+        fy_1 = target_station.lat
+        fy_2 = self.lat
+        theta_1 = target_station.lon
+        theta_2 = self.lon
+
+        # seperate calculation into 2 parts so its easy to understand
+        part_1 = np.sin((fy_2 - fy_1) / 2) ** 2
+        part_2 = np.cos(fy_1) * np.cos(fy_2) * np.sin((theta_2 - theta_1) / 2) ** 2
+
+        dist = 2 * 6371 * np.arcsin(np.sqrt(part_1 + part_2))
+        return dist
+
+    # return sepefic information of one station
+    def __str__(self):
+        if self.hub == True:
+            return f"Station({self.crs}-{self.name}/{self.region}-hub)"
+        else:
+            return f"Station({self.crs}-{self.name}/{self.region})"
         
-
-        raise NotImplementedError
+    def __eq__(self, other):
+        if self.crs == other.crs:
+            return True
+        else:
+            return False
 
 
 class RailNetwork:
@@ -53,13 +81,19 @@ class RailNetwork:
         for i in station_list:
             if i.crs not in check_list:  # unique crs
                 check_list.append(i.crs)
-                self.stations[i.crs] = i.name  # add station to the dict
+                self.stations[i.crs] = i  # add station to the dict
             else:
                 print(f"Error: two stations with same crs: {i.crs}.")
                 raise NotImplementedError
 
 
     def regions(self):
+        region_list = []
+        for i in self.stations.keys():
+            region_name = self.stations[i].region
+            if region_name not in region_list:  # add region if it`s not in the list
+                region_list.append(region_name)
+        return region_list
         raise NotImplementedError
 
     def n_stations(self):
