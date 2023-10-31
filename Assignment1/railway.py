@@ -176,7 +176,21 @@ class RailNetwork:
         #raise NotImplementedError
 
     def journey_fare(self, start, dest, summary):
-        raise NotImplementedError
+        start_station = self.stations[start]
+        dest_station = self.stations[dest]
+        journey_list = journey_planner(start, dest)
+        total_fare = 0
+        
+
+
+        # only
+        if summary:
+            return self.journey_planner(start, dest)
+        #only calculate the 
+        else:
+            return self.journey_planner(start, dest)
+
+        #raise NotImplementedError
 
     def plot_fares_to(self, crs_code, save, ADDITIONAL_ARGUMENTS):
         raise NotImplementedError
