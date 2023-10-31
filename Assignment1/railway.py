@@ -203,8 +203,8 @@ class RailNetwork:
                 if i != len(journey_list) - 1:
                     return_text = return_text + " -> "
             print(return_text)
-            print(f"Fare: {total_fare}")
-            return total_fare
+            print(f"Fare: {round(total_fare, 2)}")
+            return round(total_fare, 2)
         else:
             return total_fare
 
