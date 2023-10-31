@@ -66,6 +66,8 @@ class Station:
             return f"Station({self.crs}-{self.name}/{self.region}-hub)"
         else:
             return f"Station({self.crs}-{self.name}/{self.region})"
+
+    __repr__ = __str__
         
     def __eq__(self, other):
         if self.crs == other.crs:
