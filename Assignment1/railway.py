@@ -176,6 +176,7 @@ class RailNetwork:
         #raise NotImplementedError
 
     def journey_fare(self, start, dest, summary = False):
+        #print(summary)
         journey_list = self.journey_planner(start, dest)
         total_fare = 0
         for i in range(len(journey_list) - 1):
