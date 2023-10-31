@@ -14,7 +14,7 @@ def read_rail_network(filepath):
             for k, v in i.items():
                 st[k] = v
             all_stations.append(Station(st["name"], st["region"], st["crs"], 
-                                        st["latitude"], st["longitude"], st["hub"]))
+                                        float(st["latitude"]), float(st["longitude"]), int(st["hub"])))
 
     return RailNetwork(all_stations)
 
