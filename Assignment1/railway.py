@@ -140,8 +140,40 @@ class RailNetwork:
             return closest_h
 
     def journey_planner(self, start, dest):
-        ##add same station check!
-        raise NotImplementedError
+        start_station = self.stations[start]
+        dest_station = self.stations[dest]
+        journey_list = []
+
+        # may not be essential here
+        if start_station.__eq__(dest_station):
+            print("Warning, you cannot travel between same station!")
+            raise NotImplementedError
+
+        # check whether two crs exists
+        if start not in self.stations.keys() or dest not in self.stations.keys():
+            print("Error: crs does not exists")
+            raise NotImplementedError
+        
+        if start_station.region == dest_station.region:  # two stations are in the same region
+            journey_list.append(start_station)
+            journey_list.append(dest_station)
+        else:
+            start_hub  = self.closest_hub(start_station)
+            dest_hub = self.closest_hub(dest_station)
+            if start_hub.crs == start:  # start station is a hub
+                journey_list.append(start_hub)
+            else:  # start station is not a hub
+                journey_list.append(start_station)
+                journey_list.append(start_hub)
+
+            if dest_hub.crs == start:  # dest station is a hub
+                journey_list.append(dest_hub)
+            else:  # dest station is not a hub
+                journey_list.append(dest_station)
+                journey_list.append(dest_hub)
+        
+        return journey_list
+        #raise NotImplementedError
 
     def journey_fare(self, start, dest, summary):
         raise NotImplementedError
