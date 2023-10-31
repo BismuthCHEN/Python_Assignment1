@@ -48,10 +48,10 @@ class Station:
         #self.hub = hub
 
     def distance_to(self, target_station):
-        fy_1 = target_station.lat
-        fy_2 = self.lat
-        theta_1 = target_station.lon
-        theta_2 = self.lon
+        fy_1 = np.radians(target_station.lat)
+        fy_2 = np.radians(self.lat)
+        theta_1 = np.radians(target_station.lon)
+        theta_2 = np.radians(self.lon)
 
         # seperate calculation into 2 parts so its easy to understand
         part_1 = np.sin((fy_2 - fy_1) / 2) ** 2
@@ -178,7 +178,7 @@ class RailNetwork:
     def journey_fare(self, start, dest, summary):
         start_station = self.stations[start]
         dest_station = self.stations[dest]
-        journey_list = journey_planner(start, dest)
+        journey_list = self.journey_planner(start, dest)
         total_fare = 0
         
 
