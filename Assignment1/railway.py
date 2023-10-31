@@ -85,6 +85,8 @@ class RailNetwork:
             else:
                 print(f"Error: two stations with same crs: {i.crs}.")
                 raise NotImplementedError
+        self.n_stations = self.n_stations()
+        self.regions = self.regions()
 
 
     def regions(self):
@@ -94,11 +96,11 @@ class RailNetwork:
             if region_name not in region_list:  # add region if it`s not in the list
                 region_list.append(region_name)
         return region_list
-        raise NotImplementedError
+        #raise NotImplementedError
 
     def n_stations(self):
-        return len(self.stations)
-        raise NotImplementedError
+        return len(self.stations.keys())
+        #raise NotImplementedError
 
     def hub_stations(self, region = None):
         station_list = []
