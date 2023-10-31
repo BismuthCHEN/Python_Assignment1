@@ -1,4 +1,5 @@
 import csv
+from railway import Station, RailNetwork
 
 def read_rail_network(filepath):
     all_stations = []
@@ -12,8 +13,10 @@ def read_rail_network(filepath):
             st = {}
             for k, v in i.items():
                 st[k] = v
-            all_stations.append(st)
-    return all_stations
+            all_stations.append(Station(st["name"], st["region"], st["crs"], 
+                                        st["latitude"], st["longitude"], st["hub"]))
+
+    return RailNetwork(all_stations)
 
     raise NotImplementedError
 
