@@ -106,16 +106,18 @@ class RailNetwork:
         if region == None:
             for i in self.stations.values():
                 if i.hub == True:
-                    station_list.append(i.__str__())
+                    #station_list.append(i.__str__())  ####!!!!
+                    station_list.append(i)
                     region_list.append(i.region)
         else:
             for i in self.stations.values():
                 if i.hub == True and i.region == region:
-                    station_list.append(i.__str__())
+                    #station_list.append(i.__str__())  ####!!!!
+                    station_list.append(i)
                     region_list.append(i.region)
         
         if len(region_list) == 0:
-            print("Error: region does not exist")
+            print("Error: hub does not exist in this region")
             raise NotImplementedError
         else:
             return(station_list)
@@ -123,9 +125,20 @@ class RailNetwork:
         #raise NotImplementedError
 
     def closest_hub(self, s):
-        raise NotImplementedError
+        if s.hub == True:
+            return s
+        else:
+            hub_list = self.hub_stations(s.region)  # throw error if hub does not exist
+            closest_h = hub_list[0]
+            closest_dist = s.distance_to(hub_list[0])
+            for i in range(len(hub_list)):  # calculate which station is the closest hub
+                if s.distance_to(hub_list[i]) <= closest_dist:
+                    closest_dist = s.distance_to(hub_list[i])
+                    closest_h = hub_list[i]
+            return closest_h
 
     def journey_planner(self, start, dest):
+        ##add same station check!
         raise NotImplementedError
 
     def journey_fare(self, start, dest, summary):
