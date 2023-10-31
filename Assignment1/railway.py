@@ -166,7 +166,7 @@ class RailNetwork:
                 journey_list.append(start_station)
                 journey_list.append(start_hub)
 
-            if dest_hub.crs == start:  # dest station is a hub
+            if dest_hub.crs == dest:  # dest station is a hub
                 journey_list.append(dest_hub)
             else:  # dest station is not a hub
                 journey_list.append(dest_station)
@@ -175,20 +175,35 @@ class RailNetwork:
         return journey_list
         #raise NotImplementedError
 
-    def journey_fare(self, start, dest, summary):
-        start_station = self.stations[start]
-        dest_station = self.stations[dest]
+    def journey_fare(self, start, dest, summary = False):
         journey_list = self.journey_planner(start, dest)
         total_fare = 0
-        
+        for i in range(len(journey_list) - 1):
+            dist = journey_list[i].distance_to(journey_list[i + 1])  # distance
+            diff_regions = 0  # different_regions
+            if journey_list[i].region != journey_list[i + 1].region:
+                diff_regions = 1
+            hub_in_dest = len(self.hub_stations(journey_list[i + 1].region))  # hubs_in_dest_region
+            total_fare += fare_price(dist, diff_regions, hub_in_dest)
 
-
-        # only
+        # summarize the journey
         if summary:
-            return self.journey_planner(start, dest)
-        #only calculate the 
+            print(f"Journey from {self.stations[start].name}({start}) to {self.stations[dest].name} ({dest})")
+            
+            # creat the message
+            return_text = ""
+            for i in range(len(journey_list)):
+                if i == len(journey_list) - 1 or i == 0:
+                    return_text = return_text + journey_list[i].crs
+                else:
+                    return_text = return_text + f"{journey_list[i].crs} ({journey_list[i].name})"
+                if i != len(journey_list) - 1:
+                    return_text = return_text + " -> "
+            print(return_text)
+            print(f"Fare: {total_fare}")
+            return total_fare
         else:
-            return self.journey_planner(start, dest)
+            return total_fare
 
         #raise NotImplementedError
 
