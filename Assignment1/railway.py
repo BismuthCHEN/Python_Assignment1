@@ -171,8 +171,8 @@ class RailNetwork:
             if dest_hub.crs == dest:  # dest station is a hub
                 journey_list.append(dest_hub)
             else:  # dest station is not a hub
-                journey_list.append(dest_station)
                 journey_list.append(dest_hub)
+                journey_list.append(dest_station)
         
         return journey_list
         #raise NotImplementedError
