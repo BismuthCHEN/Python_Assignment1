@@ -120,11 +120,7 @@ class RailNetwork:
                     station_list.append(i)
                     region_list.append(i.region)
         
-        if len(region_list) == 0:
-            print("Error: hub does not exist in this region")
-            raise NotImplementedError
-        else:
-            return(station_list)
+        return(station_list)
 
         #raise NotImplementedError
 
@@ -210,8 +206,10 @@ class RailNetwork:
 
         #raise NotImplementedError
 
-    def plot_fares_to(self, crs_code, save, ADDITIONAL_ARGUMENTS):
-        raise NotImplementedError
+    def plot_fares_to(self, crs_code, save, bins = 0):
+
+        
+        #raise NotImplementedError
 
     def plot_network(self, marker_size: int = 5) -> None:
         """
