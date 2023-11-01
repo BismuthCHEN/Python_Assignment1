@@ -120,7 +120,10 @@ class RailNetwork:
                     station_list.append(i)
                     region_list.append(i.region)
         
-        return(station_list)
+        if len(region_list) == 0:
+            raise NotImplementedError("Error: hub does not exist in this region")
+        else:
+            return(station_list)
 
         #raise NotImplementedError
 
