@@ -210,7 +210,21 @@ class RailNetwork:
         #raise NotImplementedError
 
     def plot_fares_to(self, crs_code, save, bins = 0):
-
+        total_fare_list = []
+        for i in self.stations.values():
+            if i.crs != crs_code:
+                # skip those journey that cannot be planned
+                try:
+                    total_fare_list.append(self.journey_fare(i.crs, crs_code))
+                except:
+                    pass
+                continue
+        plt.title(f"Fare price to {self.stations[crs_code].name}")
+        plt.xlabel("Fare price (Pound)")
+        if bin == 0:
+            plt.hist(total_fare_list)
+        else:
+            plt.hist(total_fare_list, bins = bin)
         
         #raise NotImplementedError
 
