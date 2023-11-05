@@ -3,7 +3,6 @@ import math
 import numpy as np
 
 def fare_price(distance, different_regions, hubs_in_dest_region):
-    #raise NotImplementedError
     return 1 + distance * math.exp(1) ** (- distance / 100) * (1 + different_regions * hubs_in_dest_region / 10)
 
 
@@ -13,8 +12,7 @@ class Station:
 
         # check input type
         if isinstance(name, str) != True or isinstance(region, str) != True or isinstance(crs, str) != True:
-            print("Type error for name or region or crs")
-            raise NotImplementedError
+            raise TypeError("Type error: name, region and crs should be string")
         #if lati.isdecimal() != True or longi.isdecimal() != True:
             #raise NotImplementedError
         if hub == 1:
@@ -22,30 +20,25 @@ class Station:
         elif hub == 0:
             self.hub = False
         elif isinstance(hub, bool) != True:
-            print("Type error for hub")
-            raise NotImplementedError
+            raise TypeError("Type error: hub should be bool or 0/1")
         else:
             self.hub = hub
         
         # check number of latitue and longitude
         if lati > 90 or lati < -90:
-            print("Length error for latitude")
-            raise NotImplementedError
+            raise ValueError("Length error: -90 < latitude < 90")
         if longi > 180 or longi < -180:
-            print("Length error for longitude")
-            raise NotImplementedError
+            raise ValueError("Length error: -180 < longitude < 180")
         
         # check crs
         if crs.isupper() != True or len(crs) != 3 or crs.isalpha() != True:
-            print("Input error for crs")
-            raise NotImplementedError
+            raise ValueError("Input Errpr: crs")
 
         self.name = name
         self.region = region
         self.crs = crs
         self.lat = lati
         self.lon = longi
-        #self.hub = hub
 
     def distance_to(self, target_station):
         fy_1 = np.radians(target_station.lat)
@@ -69,7 +62,7 @@ class Station:
 
     __repr__ = __str__
         
-    def __eq__(self, other):
+    def __eq__(self, other):  # in the end I did not use it.
         if self.crs == other.crs:
             return True
         else:
@@ -85,8 +78,7 @@ class RailNetwork:
                 check_list.append(i.crs)
                 self.stations[i.crs] = i  # add station to the dict
             else:
-                print(f"Error: two stations with same crs: {i.crs}.")
-                raise NotImplementedError
+                raise IOError(f"Input error: two stations with same crs: {i.crs}.")
         self.n_stations = self.n_stations()
         self.regions = self.regions()
 
@@ -98,37 +90,33 @@ class RailNetwork:
             if region_name not in region_list:  # add region if it`s not in the list
                 region_list.append(region_name)
         return region_list
-        #raise NotImplementedError
 
     def n_stations(self):
         return len(self.stations.keys())
-        #raise NotImplementedError
 
     def hub_stations(self, region = None):
         station_list = []
         region_list = []
+        # list all hub stations
         if region == None:
             for i in self.stations.values():
                 if i.hub == True:
-                    #station_list.append(i.__str__())  ####!!!!
                     station_list.append(i)
                     region_list.append(i.region)
+        # list hub stations in specific region
         else:
             for i in self.stations.values():
                 if i.hub == True and i.region == region:
-                    #station_list.append(i.__str__())  ####!!!!
                     station_list.append(i)
                     region_list.append(i.region)
         
         if len(region_list) == 0:
-            raise NotImplementedError("Error: hub does not exist in this region")
+            raise ValueError("Error: hub does not exist in this region")
         else:
             return(station_list)
 
-        #raise NotImplementedError
-
     def closest_hub(self, s):
-        if s.hub == True:
+        if s.hub == True:  # this station is a hub
             return s
         else:
             hub_list = self.hub_stations(s.region)  # throw error if hub does not exist
@@ -147,13 +135,11 @@ class RailNetwork:
 
         # may not be essential here
         if start_station.__eq__(dest_station):
-            print("Warning, you cannot travel between same station!")
-            raise NotImplementedError
+            raise ValueError("Warning, you cannot travel between same station!")
 
         # check whether two crs exists
         if start not in self.stations.keys() or dest not in self.stations.keys():
-            print("Error: crs does not exists")
-            raise NotImplementedError
+            raise IOError("Input error: crs does not exists")
         
         if start_station.region == dest_station.region:  # two stations are in the same region
             journey_list.append(start_station)
@@ -174,10 +160,8 @@ class RailNetwork:
                 journey_list.append(dest_station)
         
         return journey_list
-        #raise NotImplementedError
 
     def journey_fare(self, start, dest, summary = False):
-        #print(summary)
         journey_list = self.journey_planner(start, dest)
         total_fare = 0
         for i in range(len(journey_list) - 1):
@@ -195,7 +179,7 @@ class RailNetwork:
             # creat the message
             return_text = ""
             for i in range(len(journey_list)):
-                if i == len(journey_list) - 1 or i == 0:
+                if i == len(journey_list) - 1 or i == 0:  # First and last one
                     return_text = return_text + journey_list[i].crs
                 else:
                     return_text = return_text + f"{journey_list[i].crs} ({journey_list[i].name})"
@@ -206,8 +190,6 @@ class RailNetwork:
             return round(total_fare, 2)
         else:
             return total_fare
-
-        #raise NotImplementedError
 
     def plot_fares_to(self, crs_code, save, **args):
         total_fare_list = []
@@ -231,8 +213,6 @@ class RailNetwork:
             plt.close()  # save but not show it
         else:
             plt.show()
-        
-        #raise NotImplementedError
 
     def plot_network(self, marker_size: int = 5) -> None:
         """
