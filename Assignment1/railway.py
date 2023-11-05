@@ -228,6 +228,7 @@ class RailNetwork:
         if save:
             station_name = self.stations[crs_code].name.replace(" ", "_")
             plt.savefig(f"./Fare_price_to_{station_name}.png")
+            plt.close()  # save but not show it
         else:
             plt.show()
         
