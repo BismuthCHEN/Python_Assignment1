@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import math
 import numpy as np
+import numbers
 
 def fare_price(distance, different_regions, hubs_in_dest_region):
     return 1 + distance * math.exp(1) ** (- distance / 100) * (1 + different_regions * hubs_in_dest_region / 10)
@@ -13,8 +14,8 @@ class Station:
         # check input type
         if isinstance(name, str) != True or isinstance(region, str) != True or isinstance(crs, str) != True:
             raise TypeError("Type error: name, region and crs should be string")
-        #if lati.isdecimal() != True or longi.isdecimal() != True:
-            #raise NotImplementedError
+        if isinstance(lati, numbers.Number) != True or isinstance(longi, numbers.Number) != True:
+            raise TypeError("Type error: latitude and longitude are not decimal numbers")
         if hub == 1:
             self.hub = True
         elif hub == 0:
