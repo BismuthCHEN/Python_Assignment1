@@ -65,10 +65,19 @@ def test_RailNetworkFunctions():
     # test n_stations() function
     assert rail_network.n_stations == 2395
 
-
     # test return information
 
-    # test hub_station() function
+    # test hub_stations() function
+    assert len(rail_network.hub_stations()) == 41
+    assert len(rail_network.hub_stations("North West")) == 3
+    receve_list = []  # transfer Station class into string
+    for i in rail_network.hub_stations("North West"):
+        receve_list.append(str(i))
+    assert set(receve_list) == set(['Station(CAR-Carlisle/North West-hub)', 
+                                    'Station(LIV-Liverpool Lime Street/North West-hub)', 
+                                    'Station(MAN-Manchester Piccadilly/North West-hub)'])
+
+
 
     # test closest_hub() function
 
