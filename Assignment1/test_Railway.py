@@ -57,6 +57,15 @@ def test_RailNetworkFunctions():
     exec_msg = e.value.args[0]
     assert exec_msg == f"Input error: two stations with same crs: {st1.crs}."
 
+    # test regions() function
+    assert set(rail_network.regions) == set(['East of England', 'North West', 'London', 'Scotland', 
+                                    'South West', 'West Midlands', 'Yorkshire and The Humber', 
+                                    'North East', 'East Midlands', 'South East', 'Wales'])
+    
+    # test n_stations() function
+    assert rail_network.n_stations == 2395
+
+
     # test return information
 
     # test hub_station() function
