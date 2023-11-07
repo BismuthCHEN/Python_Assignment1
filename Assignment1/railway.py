@@ -78,7 +78,7 @@ class RailNetwork:
             if i.crs not in check_list:  # unique crs
                 check_list.append(i.crs)
                 self.stations[i.crs] = i  # add station to the dict
-            else:
+            else:  # throw error if two stations have same crs
                 raise IOError(f"Input error: two stations with same crs: {i.crs}.")
         self.n_stations = self.n_stations()
         self.regions = self.regions()
