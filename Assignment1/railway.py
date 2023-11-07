@@ -33,7 +33,7 @@ class Station:
         
         # check crs
         if crs.isupper() != True or len(crs) != 3 or crs.isalpha() != True:
-            raise ValueError("Input Errpr: crs")
+            raise ValueError("Value Error: crs should be 3-character string with upper letters")
 
         self.name = name
         self.region = region
