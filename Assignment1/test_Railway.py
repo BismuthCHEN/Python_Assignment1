@@ -52,10 +52,10 @@ def test_RailNetworkFunctions():
     # test unique crs in the Network
     st1 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, 0)
     st2 = Station("Aberdeen", "Scotland", "EDP", 57.143127, -2.097464, 1)
-    with pytest.raises(IOError) as e:
+    with pytest.raises(ValueError) as e:
         RailNetwork([st1, st2])
     exec_msg = e.value.args[0]
-    assert exec_msg == f"Input error: two stations with same crs: {st1.crs}."
+    assert exec_msg == f"Value error: two stations with same crs: {st1.crs}."
 
     # test regions() function
     assert set(rail_network.regions) == set(['East of England', 'North West', 'London', 'Scotland', 
@@ -77,9 +77,19 @@ def test_RailNetworkFunctions():
                                     'Station(LIV-Liverpool Lime Street/North West-hub)', 
                                     'Station(MAN-Manchester Piccadilly/North West-hub)'])
 
+    
 
 
     # test closest_hub() function
+    st3 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, False)
+    assert str(rail_network.closest_hub(st3)) == "Station(STG-Stirling/Scotland-hub)"
+
+    st4 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, 0)  # test network with no hub
+    st5 = Station("Aberdeen", "Scotland", "ABD", 57.143127, -2.097464, 0) 
+    with pytest.raises(ValueError) as e:
+        RailNetwork([st4, st5]).hub_stations("Scotland")
+    exec_msg = e.value.args[0]
+    assert exec_msg == "Error: hub does not exist in this region"
 
     # test journey_planner() function
 
