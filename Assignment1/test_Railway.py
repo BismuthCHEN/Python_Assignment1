@@ -53,15 +53,13 @@ def test_StationFunctions():
     ## distance between station1 and station3 is 0
     assert st1.distance_to(st3) == 0
 
-
+# test normal functions in class RailNetwork
 def test_RailNetworkFunctions():
     # test unique crs in the Network
     with pytest.raises(ValueError) as e:
         RailNetwork([st1, st2])
     exec_msg = e.value.args[0]
     assert exec_msg == f"Value error: two stations with same crs: {st1.crs}."
-
-
 
     # test regions() function
     assert set(rail_network.regions) == set(['East of England', 'North West', 'London', 'Scotland', 
@@ -70,12 +68,6 @@ def test_RailNetworkFunctions():
     
     # test n_stations() function
     assert rail_network.n_stations == 2395
-
-
-
-    # test return information
-
-
 
 # test hub_stations() function
 def test_hubStations():
@@ -120,7 +112,14 @@ def test_JourneyPlanner():
     ## test normal function
     assert rail_network.journey_planner("BTN", "KGX") == [rail_network.stations["BTN"], rail_network.stations["KGX"]]
 
-    # test journey_fare() function
+# test journey_fare() function
+def test_journeyFare():
+    ## test money
+    assert round(rail_network.journey_fare("BTN", "KGX"), 2) == round(90.38331633489044, 2)
 
-    # test plot_fare_to() function
+    ## test case with summary == True
+    assert rail_network.journey_fare("EDP", "BTN", summary=True) == 31.87
+    assert rail_network.journey_fare("AVY", "CDF", summary=True) == 36.16
+
+# test plot_fare_to() function
 
