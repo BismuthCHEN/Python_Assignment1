@@ -202,17 +202,24 @@ class RailNetwork:
                 except:
                     pass
                 continue
-        plt.title(f"Fare price to {self.stations[crs_code].name}")
-        plt.xlabel("Fare price (Pound)")
-        if args != None:
-            plt.hist(total_fare_list, **args)
-        else:
-            plt.hist(total_fare_list)
+        
         if save:
+            plt.title(f"Fare price to {self.stations[crs_code].name}")
+            plt.xlabel("Fare price (Pound)")
+            if args != None:
+                plt.hist(total_fare_list, **args)
+            else:
+                plt.hist(total_fare_list)
             station_name = self.stations[crs_code].name.replace(" ", "_")
             plt.savefig(f"./Fare_price_to_{station_name}.png")
-            plt.close()  # save but not show it
+            #plt.close()  # save but not show it
         else:
+            plt.title(f"Fare price to {self.stations[crs_code].name}")
+            plt.xlabel("Fare price (Pound)")
+            if args != None:
+                plt.hist(total_fare_list, **args)
+            else:
+                plt.hist(total_fare_list)
             plt.show()
 
     def plot_network(self, marker_size: int = 5) -> None:
