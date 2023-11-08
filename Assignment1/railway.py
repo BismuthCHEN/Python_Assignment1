@@ -79,7 +79,7 @@ class RailNetwork:
                 check_list.append(i.crs)
                 self.stations[i.crs] = i  # add station to the dict
             else:  # throw error if two stations have same crs
-                raise IOError(f"Input error: two stations with same crs: {i.crs}.")
+                raise ValueError(f"Value error: two stations with same crs: {i.crs}.")
         self.n_stations = self.n_stations()
         self.regions = self.regions()
 
@@ -140,7 +140,7 @@ class RailNetwork:
 
         # check whether two crs exists
         if start not in self.stations.keys() or dest not in self.stations.keys():
-            raise IOError("Input error: crs does not exists")
+            raise ValueError("Value error: crs does not exists")
         
         if start_station.region == dest_station.region:  # two stations are in the same region
             journey_list.append(start_station)
