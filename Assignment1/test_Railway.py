@@ -7,6 +7,12 @@ from pathlib import Path
 network_csv = Path("uk_stations.csv")
 rail_network = read_rail_network(network_csv)
 
+st1 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, 0)
+st2 = Station("Aberdeen", "Scotland", "EDP", 57.143127, -2.097464, 1)
+st3 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, False)
+st4 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, 0)
+st5 = Station("Aberdeen", "Scotland", "ABD", 57.143127, -2.097464, 0) 
+
 
 @pytest.mark.parametrize("name, region, crs, lati, longi, hub, expected, errorType", [
     # test type of name, region and crs
@@ -42,20 +48,20 @@ def test_StationFunctions():
     st2 = Station("Aberdeen", "Scotland", "ABD", 57.143127, -2.097464, 1) 
     st3 = Station("Station3", "Scotland", "TES", 55.927615, -3.307829, 1) 
     
-    # distance between station1 and station2 is about 154.19
+    ## distance between station1 and station2 is about 154.19
     assert round(st1.distance_to(st2), 2) == 154.19
-    # distance between station1 and station3 is 0
+    ## distance between station1 and station3 is 0
     assert st1.distance_to(st3) == 0
 
 
 def test_RailNetworkFunctions():
     # test unique crs in the Network
-    st1 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, 0)
-    st2 = Station("Aberdeen", "Scotland", "EDP", 57.143127, -2.097464, 1)
     with pytest.raises(ValueError) as e:
         RailNetwork([st1, st2])
     exec_msg = e.value.args[0]
     assert exec_msg == f"Value error: two stations with same crs: {st1.crs}."
+
+
 
     # test regions() function
     assert set(rail_network.regions) == set(['East of England', 'North West', 'London', 'Scotland', 
@@ -65,10 +71,18 @@ def test_RailNetworkFunctions():
     # test n_stations() function
     assert rail_network.n_stations == 2395
 
+
+
     # test return information
 
-    # test hub_stations() function
+
+
+# test hub_stations() function
+def test_hubStations():
+    ## test all stations in the network
     assert len(rail_network.hub_stations()) == 41
+
+    ## test stations in North West
     assert len(rail_network.hub_stations("North West")) == 3
     receve_list = []  # transfer Station class into string
     for i in rail_network.hub_stations("North West"):
@@ -77,21 +91,34 @@ def test_RailNetworkFunctions():
                                     'Station(LIV-Liverpool Lime Street/North West-hub)', 
                                     'Station(MAN-Manchester Piccadilly/North West-hub)'])
 
-    
-
-
-    # test closest_hub() function
-    st3 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, False)
+# test closest_hub() function
+def test_closestHub():
+    ## test normal case
     assert str(rail_network.closest_hub(st3)) == "Station(STG-Stirling/Scotland-hub)"
 
-    st4 = Station("Edinburgh Park", "Scotland", "EDP", 55.927615, -3.307829, 0)  # test network with no hub
-    st5 = Station("Aberdeen", "Scotland", "ABD", 57.143127, -2.097464, 0) 
+    ## test regions with no hub station
+    ## test network with no hub
     with pytest.raises(ValueError) as e:
         RailNetwork([st4, st5]).hub_stations("Scotland")
     exec_msg = e.value.args[0]
     assert exec_msg == "Error: hub does not exist in this region"
 
-    # test journey_planner() function
+# test journey_planner() function
+def test_JourneyPlanner():
+    ## test start and dest are the same station
+    with pytest.raises(ValueError) as e:
+        RailNetwork([st4, st5]).journey_planner("EDP", "EDP")
+    exec_msg = e.value.args[0]
+    assert exec_msg == "Warning, you cannot travel between same station!"
+
+    ## test crs not in the list
+    with pytest.raises(ValueError) as e:
+        RailNetwork([st4, st5]).journey_planner("EDP", "EFG")  # this network contains EDP and ABD
+    exec_msg = e.value.args[0]
+    assert exec_msg == "Value error: crs does not exists"
+
+    ## test normal function
+    assert rail_network.journey_planner("BTN", "KGX") == [rail_network.stations["BTN"], rail_network.stations["KGX"]]
 
     # test journey_fare() function
 
