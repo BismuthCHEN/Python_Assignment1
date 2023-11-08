@@ -130,6 +130,10 @@ class RailNetwork:
             return closest_h
 
     def journey_planner(self, start, dest):
+        # check whether two crs exists
+        if start not in self.stations.keys() or dest not in self.stations.keys():
+            raise ValueError("Value error: crs does not exists")
+
         start_station = self.stations[start]
         dest_station = self.stations[dest]
         journey_list = []
@@ -137,10 +141,6 @@ class RailNetwork:
         # may not be essential here
         if start_station.__eq__(dest_station):
             raise ValueError("Warning, you cannot travel between same station!")
-
-        # check whether two crs exists
-        if start not in self.stations.keys() or dest not in self.stations.keys():
-            raise ValueError("Value error: crs does not exists")
         
         if start_station.region == dest_station.region:  # two stations are in the same region
             journey_list.append(start_station)
