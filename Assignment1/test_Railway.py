@@ -1,5 +1,6 @@
 import pytest
-from railway import Station, RailNetwork
+import math
+from railway import Station, RailNetwork, fare_price
 from utilities import read_rail_network
 from pathlib import Path
 
@@ -40,6 +41,11 @@ def test_StationTypeError(name, region, crs, lati, longi, hub, expected, errorTy
         Station(name, region, crs, lati, longi, hub)
     exec_msg = e.value.args[0]
     assert exec_msg == expected
+
+
+# test fare_price() function
+def test_farePrice():
+    assert fare_price(100, 10, 10) == 1 + 100 * math.exp(-1) * (1 + 10)
 
 
 def test_StationFunctions():
@@ -122,4 +128,7 @@ def test_journeyFare():
     assert rail_network.journey_fare("AVY", "CDF", summary=True) == 36.16
 
 # test plot_fare_to() function
+def test_plotFare():
+    rail_network.plot_fares_to("KGX", save=True, bins=10)
+    assert Path('./Fare_price_to_London_Kings_Cross.png').exists() == True
 
