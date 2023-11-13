@@ -132,3 +132,4 @@ def test_plotFare():
     rail_network.plot_fares_to("KGX", save=True, bins=10)
     assert Path('./Fare_price_to_London_Kings_Cross.png').exists() == True
 
+
